@@ -14,13 +14,23 @@ public class LambdaHandler implements RequestHandler<AwsProxyRequest, AwsProxyRe
 
     static {
         try {
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(Application.class); }
+            System.out.println("Handler going to assign...................................");
+            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(ProductserviceApplication.class);
+            System.out.println("Handler assigned...................................");
+        }
         catch (ContainerInitializationException ex){
+            ex.printStackTrace();
             throw new RuntimeException("Unable to load spring boot application",ex); }
     }
 
     @Override
     public AwsProxyResponse handleRequest(AwsProxyRequest input, Context context) {
+        if(null!=input && null!=input.getBody()) {
+            System.out.println("Value of input body: "+input.getBody());
+        }
+        if(null!=input && null!=input.getPath()) {
+            System.out.println("Value of input : "+input.getPath());
+        }
         return handler.proxy(input, context);
     }
 }
